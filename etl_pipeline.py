@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+from sqlalchemy import create_engine
 import logging
 import os
 from dotenv import load_dotenv
@@ -34,6 +35,18 @@ def transform_data(json_data: dict) -> pd.DataFrame:
     df.fillna("Information not available", inplace=True)
     logging.info(f"Transformation completed. Total processed registers: {len(df)}")
     return df
+
+def load_data(df: pd.DataFrame, db_url: str, table_name:str):
+    logging.info("Loading Postgres data (Load)...")
+
+    try:
+        engine = create_engine(db_url)
+        df.to_sql(table_name, engine, if_exists='replace', index=False)
+
+        logging.info(f"Data sucessfully saved to '{table_name}'.")
+    except Exception as e:
+        logging.error(f"Failed to save data to '{table_name}'. Error: {e}")
+        raise e
 
 if __name__ == "__main__":
     load_dotenv()
