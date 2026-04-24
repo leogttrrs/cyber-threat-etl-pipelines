@@ -48,7 +48,7 @@ def load_data(df: pd.DataFrame, db_url: str, table_name:str):
         logging.error(f"Failed to save data to '{table_name}'. Error: {e}")
         raise e
 
-if __name__ == "__main__":
+def run_vulnerabilities_pipeline():
     load_dotenv()
 
     API_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
@@ -68,3 +68,6 @@ if __name__ == "__main__":
 
         except Exception as e:
             logging.error(f"Error in pipeline execution: {e}")
+
+if __name__ == "__main__":
+    run_vulnerabilities_pipeline()
