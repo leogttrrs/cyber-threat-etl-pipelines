@@ -1,4 +1,5 @@
 import requests
+import pandas as pd
 import logging
 import os
 from dotenv import load_dotenv
@@ -11,6 +12,28 @@ def extract_data(url: str) -> dict:
     response.raise_for_status()
     return response.json()
 
+def transform_data(json_data: dict) -> pd.DataFrame:
+    logging.info("Starting data transformation (Transform)...")
+
+    vulnerabilities = json_data.get("vulnerabilities", [])
+    df = pd.DataFrame(vulnerabilities)
+
+    important_columns = [
+        'cveID',
+        'vendorProject',
+        'product',
+        'vulnerabilityName',
+        'dateAdded',
+        'shortDescription'
+    ]
+
+    df = df[important_columns]
+
+    df['dateAdded'] = pd.to_datetime(df['dateAdded'])
+
+    df.fillna("Information not available", inplace=True)
+    logging.info(f"Transformation completed. Total processed registers: {len(df)}")
+    return df
 
 if __name__ == "__main__":
     load_dotenv()
