@@ -27,3 +27,12 @@ Clone the repository and install the dependencies:
 git clone https://github.com/leogttrrs/CISA-KEV-ETL.git
 cd cisa-kev-etl
 pip install -r requirements.txt
+```
+Copy the `.env.example` file and rename it to `.env`
+
+Run the pipeline:
+```bash
+python etl_pipeline.py
+```
+
+The results will appear in the table named "active_vulnerabilities" on your NeonDB PostgreSQL.
